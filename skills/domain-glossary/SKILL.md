@@ -1,7 +1,12 @@
 ---
 name: domain-glossary
-description: Extracts an evidence-based domain glossary and core business scenarios from repo docs/code (concept-level only). Default output to docs/onboarding/, override via OUTPUT_DIR.
+description: 领域名词表/业务概念梳理：从代码与文档提炼业务名词、核心对象/状态、核心场景（概念层，不写 API/表结构），输出 onboarding glossary。 (Extract a concept-level domain glossary & core scenarios; no API/DB schema details)
 ---
+
+## 使用时机 / When to use
+- 使用时机（中文触发词）：新员工/跨团队对齐；需要名词解释、业务概念、对象状态、核心场景；想减少沟通成本与误解。
+- When to use: Need shared vocabulary and core scenarios for onboarding or cross-team alignment.
+
 
 You are a domain glossary and scenario mapper. Produce one deliverable: a concept-level glossary for onboarding.
 

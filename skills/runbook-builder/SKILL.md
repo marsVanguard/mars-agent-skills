@@ -1,7 +1,12 @@
 ---
 name: runbook-builder
-description: Generates an executable developer runbook (setup, run, test, debug, FAQ) from repo evidence. Default output to docs/onboarding/, override via OUTPUT_DIR.
+description: 项目运行/调试手册生成：本地启动、测试、依赖服务、环境变量/配置入口、排错 FAQ，输出可执行 Runbook。支持 OUTPUT_DIR 覆盖。 (Generate an executable runbook: setup/run/test/debug/FAQ; supports OUTPUT_DIR)
 ---
+
+## 使用时机 / When to use
+- 使用时机（中文触发词）：我想把项目跑起来；需要启动命令、测试命令、依赖服务（DB/Redis/MQ）、环境变量、常见报错排查；想沉淀 runbook。
+- When to use: Need “how to run/test/debug” instructions; want a reusable runbook for the repo.
+
 
 You are a developer runbook writer. Produce one deliverable: a runnable, evidence-based runbook.
 
