@@ -1,61 +1,70 @@
 ---
 name: <skill-name>
-description: <one-line description of what this Skill does and what it outputs>. Default output to docs/onboarding/, override via OUTPUT_DIR.
+description: <此技能的单行描述及其输出内容>。默认输出到 docs/onboarding/，可通过 OUTPUT_DIR 覆盖。
+triggers: [<自然语言触发词>, <关键词>, <中英文短语>]
+inputs: [<需要的上下文或资料>]
+outputs: [<输出内容概述>]
+deliverable: "<deliverable_filename>.md"
+non_goals: [<明确不做的事>]
 ---
 
-You are a specialist agent for <skill-name>. Your job is to execute a repeatable SOP and produce exactly **one** deliverable artifact.
+你是 <skill-name> 的专业代理。你的工作是执行可重复的标准操作流程（SOP）并生成恰好**一个**交付物。
 
-# Output location (portable, required)
-- Default OUTPUT_DIR: `docs/onboarding/`
-- Users may override by providing: `OUTPUT_DIR=<path>` in the request.
-- Determine OUTPUT_ROOT by:
-  1) If user specifies OUTPUT_DIR, use it.
-  2) Else if `docs/onboarding/` exists, use it.
-  3) Else if `docs/` exists, use it.
-  4) Else use repository root `./`.
-- Output filename: `<deliverable_filename>.md`
-- If the tool/agent can write files: create OUTPUT_ROOT directory if missing.
-- If file writing is not supported:
-  1) Print `SAVE_AS: <OUTPUT_ROOT>/<deliverable_filename>.md`
-  2) Print the full Markdown content in chat for copy/paste.
+# 输出位置（可移植，必需）
+- 默认 OUTPUT_DIR：`docs/onboarding/`
+- 用户可以通过在请求中提供：`OUTPUT_DIR=<path>` 来覆盖。
+- 确定 OUTPUT_ROOT 的顺序：
+  1) 如果用户指定了 OUTPUT_DIR，则使用它。
+  2) 否则，如果 `docs/onboarding/` 存在，则使用它。
+  3) 否则，如果 `docs/` 存在，则使用它。
+  4) 否则使用仓库根目录 `./`。
+- 输出文件名：`<deliverable_filename>.md`
+- 如果工具/代理可以写入文件：如果缺失则创建 OUTPUT_ROOT 目录。
+- 如果不支持文件写入：
+  1) 打印 `SAVE_AS: <OUTPUT_ROOT>/<deliverable_filename>.md`
+  2) 在聊天中打印完整的 Markdown 内容以便复制/粘贴。
 
-# Inputs
-- <Describe required inputs: repo, docs, user context, constraints, etc.>
-- Optional: <extra context the user may provide>
+# 输入
+- <描述必需的输入：仓库、文档、用户上下文、约束等>
+- 可选：<用户可能提供的额外上下文>
 
-# Hard constraints (required)
-1) Deliverable-driven: produce only the deliverable described in this Skill.
-2) If repo-scanning is involved: evidence-first (path + snippet/identifier). Never invent facts.
-3) Missing information must be labeled as [ASSUMPTION] and collected as [OPEN QUESTIONS].
-4) Avoid tool-specific features; keep it portable.
+# 硬性约束（必需）
+1) 交付物驱动：只生成此技能中描述的交付物。
+2) 如果涉及仓库扫描：证据优先（路径 + 代码片段/标识符）。永远不要编造事实。
+3) 缺失信息必须标记为 [ASSUMPTION] 并收集为 [OPEN QUESTIONS]。
+4) 避免工具特定功能；保持可移植性。
 
-# Procedure (must follow in order)
-Step 1 — <First step: gather evidence / parse context / collect sources>
-Step 2 — <Second step: structure information / map modules / classify inputs>
-Step 3 — <Third step: produce output sections in order>
-Step 4 — <Quality check: ensure constraints met and open questions included>
-Step 5 — <Emit deliverable: write file or print SAVE_AS + full content>
+# 何时不使用（建议）
+- <本技能不适合的场景>
+- <推荐使用的替代技能>
 
-# Deliverable template (strict order)
-Write the deliverable using the structure below, in order. Keep it reviewable and decision-oriented.
+# 流程（必须按顺序执行）
+步骤 1 — <第一步：收集证据 / 解析上下文 / 收集来源>
+步骤 2 — <第二步：组织信息 / 映射模块 / 分类输入>
+步骤 3 — <第三步：按顺序生成输出部分>
+步骤 4 — <质量检查：确保满足约束并包含待澄清问题>
+步骤 5 — <生成交付物：写入文件或打印 SAVE_AS + 完整内容>
 
-1. Title / One-liner
-- <What this doc is and why it exists>
+# 交付物模板（严格顺序）
+使用以下结构按顺序编写交付物。保持其可审查性和决策导向性。
 
-2. Context / Background (if applicable)
-- <Evidence-based summary>
-- [ASSUMPTION] if needed
+1. 标题 / 单行描述
+- <本文档是什么以及它存在的原因>
 
-3. Main content
-- <Sections that matter for this Skill>
+2. 上下文 / 背景（如适用）
+- <基于证据的摘要>
+- 如需要，使用 [ASSUMPTION]
 
-4. Risks / Gotchas (if applicable)
-- <Evidence-based issues or uncertainty>
+3. 主要内容
+- <对此技能重要的部分>
 
-5. [OPEN QUESTIONS] (prioritized)
-- P0: blocks progress
-- P1: affects quality/decision
-- Who should confirm (role)
+4. 风险 / 注意事项（如适用）
+- <基于证据的问题或不确定性>
+
+5. [待澄清问题]（按优先级）
+- P0：阻碍进展
+- P1：影响质量/决策
+- 应由谁确认（角色）
 ```
 
 ---

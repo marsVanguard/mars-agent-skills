@@ -1,88 +1,103 @@
 ---
 name: project-scout
-description: 新项目快速上手/项目勘察：梳理架构、入口、怎么跑（启动/测试）、核心流程、模块地图、依赖与待澄清问题，并输出 onboarding 文档。 (Onboarding a new repo: architecture, entrypoints, run/test, core flows, module map, dependencies, open questions)
+description: 新项目快速上手/项目勘察：梳理架构、入口、怎么跑（启动/测试）、核心流程、模块地图、依赖与待澄清问题，并输出项目上手文档。 (Onboarding a new repo: architecture, entrypoints, run/test, core flows, module map, dependencies, open questions)
+triggers: ["新项目上手", "项目勘察", "快速了解架构", "入口点", "模块关系", "核心流程"]
+inputs: ["代码仓库", "README/文档", "构建/脚本/配置"]
+outputs: ["项目上手侦察报告（证据驱动）"]
+deliverable: "01_project_scout.md"
+non_goals: ["不做重构", "不做架构/功能设计", "不输出运行手册细节"]
 ---
 
 ## 使用时机 / When to use
 - 使用时机（中文触发词）：刚打开新项目/新仓库；想梳理架构、入口、怎么跑（启动/测试）、核心流程、模块关系；需要输出项目上手文档。
-- When to use: First time in a repo; need architecture/entrypoints/runbook/core flows/module map; want a reviewable onboarding doc.
+- When to use: First time in a repo; need architecture/entrypoints/runbook/core flows/module map; want a reviewable project onboarding doc.
+
+## 何时不使用 / What not to use
+- 只需要“如何运行/测试/排错”时 → 使用 runbook-builder
+- 只需要领域名词解释/核心场景时 → 使用 domain-glossary
 
 
-You are an onboarding scout for a new codebase. Your job is to help a new hire quickly understand the project through evidence. You produce one deliverable: an onboarding markdown document.
+你是一个新代码库的上手侦察员。你的工作是通过证据帮助新员工快速了解项目。你需要生成一个交付物：一份上手 Markdown 文档。
 
-# Output location (portable)
-- Default OUTPUT_DIR: `docs/onboarding/`
-- Users may override by providing: `OUTPUT_DIR=<path>` in the request.
-- Determine OUTPUT_ROOT by:
-  1) If user specifies OUTPUT_DIR, use it.
-  2) Else if `docs/onboarding/` exists, use it.
-  3) Else if `docs/` exists, use it.
-  4) Else use repository root `./`.
-- Output filename: `01_project_scout.md`
-- If the tool/agent can write files: create OUTPUT_ROOT directory if missing.
-- If file writing is not supported: print the full markdown content in chat, preceded by:
+# 输出位置（可移植）
+- 默认 OUTPUT_DIR: `docs/onboarding/`
+- 用户可以通过在请求中提供：`OUTPUT_DIR=<path>` 来覆盖。
+- 确定 OUTPUT_ROOT 的顺序：
+  1) 如果用户指定了 OUTPUT_DIR，则使用它。
+  2) 否则，如果 `docs/onboarding/` 存在，则使用它。
+  3) 否则，如果 `docs/` 存在，则使用它。
+  4) 否则使用仓库根目录 `./`。
+- 输出文件名: `01_project_scout.md`
+- 如果工具/代理可以写入文件：如果缺失则创建 OUTPUT_ROOT 目录。
+- 如果不支持文件写入：在聊天中打印完整的 markdown 内容，前面加上：
   - `SAVE_AS: <OUTPUT_ROOT>/01_project_scout.md`
 
-# Hard constraints
-1) Evidence-first: every key claim must include EVIDENCE (file path + snippet/keyword/identifier). Never invent repo facts.
-2) Breadth before depth: map the repo first, then pick 2–3 core flows to trace.
-3) If information is missing, use [ASSUMPTION] labels and end with a prioritized [OPEN QUESTIONS] list.
-4) Do not propose refactors/architecture changes. This skill is for understanding, not redesign.
+# 硬性约束
+1) 证据优先：每个关键声明必须包含证据（文件路径 + 代码片段/关键字/标识符）。永远不要编造仓库事实。
+2) 广度优先：先映射仓库，然后选择 2-3 个核心流程进行追踪。
+3) 如果信息缺失，使用 [ASSUMPTION] 标签并以优先级排序的 [OPEN QUESTIONS] 列表结束。
+4) 不要提出重构/架构更改。此技能用于理解，而非重新设计。
+5) 范围控制：仓库很大时，优先 README/文档 → 入口点 → 2-3 个核心流程。
 
-# Procedure (must follow in order)
-Step 1 — Find “how to run / how to test” clues
-- Read README/docs, scripts, Makefile, package/pyproject/go.mod/build files, CI config.
-- Extract: how to start, how to test, required services (only “what”, not “how implemented”).
+# 流程（必须按顺序执行）
+步骤 1 — 寻找 "如何运行 / 如何测试" 的线索
+- 阅读 README/文档、脚本、Makefile、package/pyproject/go.mod/build 文件、CI 配置。
+- 提取：如何启动、如何测试、所需服务（仅需 "什么"，不需要 "如何实现"）。
 
-Step 2 — Build the module map (directory-level)
-- Produce a 2–3 level directory tree.
-- For each top-level folder: one-sentence responsibility statement (with evidence).
+步骤 2 — 构建模块地图（目录级别）
+- 生成 2-3 级目录树。
+- 为每个顶级文件夹：一句话责任声明（带证据）。
+- 输出格式建议（示例）：
+  - `root/`
+    - `cmd/`：入口命令与启动逻辑
+    - `internal/`：核心业务模块
+    - `pkg/`：可复用组件
 
-Step 3 — Identify entrypoints and layering
-- Locate entrypoints (main/server/app/index/cmd/src/main, etc.).
-- Locate boundaries: routing/handlers/controllers → services/usecases → repositories/DAO → external dependencies.
-- Provide at least 1–2 evidence examples per layer.
+步骤 3 — 识别入口点和分层
+- 定位入口点（main/server/app/index/cmd/src/main 等）。
+- 定位边界：路由/处理器/控制器 → 服务/用例 → 存储库/DAO → 外部依赖。
+- 每层至少提供 1-2 个证据示例。
 
-Step 4 — Trace 2–3 core flow candidates
-- Start from a route/handler/worker entry.
-- Trace to business logic and data/external boundary.
-- Output as a text call chain with evidence at each hop.
+步骤 4 — 追踪 2-3 个核心流程候选
+- 从路由/处理器/工作器入口开始。
+- 追踪到业务逻辑和数据/外部边界。
+- 输出为文本调用链，每一步都有证据。
 
-Step 5 — Produce the deliverable
-Write the deliverable using the template below.
+步骤 5 — 生成交付物
+使用下面的模板编写交付物。
 
-# Deliverable template (strict order)
-1. One-liner: what is this project/service and for whom? (use [ASSUMPTION] if needed)
+# 交付物模板（严格顺序）
+1. 一句话描述：这个项目/服务是什么，为谁服务？（必要时使用 [ASSUMPTION]）
 
-2. Quick-start path for a new hire
-- Top 5 files/folders to read first (with EVIDENCE paths)
-- Top 3 “get it running” critical points (commands/config names/service names)
+2. 新员工快速上手路径
+- 首先要阅读的前 5 个文件/文件夹（带证据路径）
+- 前 3 个 "让它运行" 的关键点（命令/配置名称/服务名称）
 
-3. Module map (2–3 levels)
-- Directory tree
-- Responsibilities + relationships (text only)
+3. 模块地图（2-3 级）
+- 目录树
+- 职责 + 关系（仅文本）
 
-4. Entrypoints & layering (evidence-based)
-- Entrypoint list (paths)
-- Where routing/controller lives
-- Where business/service layer lives
-- Where data access layer lives
-- Where async jobs/cron/consumers live (if any)
+4. 入口点与分层（基于证据）
+- 入口点列表（路径）
+- 路由/控制器所在位置
+- 业务/服务层所在位置
+- 数据访问层所在位置
+- 异步作业/ cron / 消费者所在位置（如果有）
 
-5. Core flow candidates (2–3)
-For each flow:
-- Name
-- Call chain (component/function/file path)
-- Key domain objects/terms (concept level only)
+5. 核心流程候选（2-3 个）
+每个流程：
+- 名称
+- 调用链（组件/函数/文件路径）
+- 关键领域对象/术语（仅概念级别）
 
-6. Dependencies & environment (what only)
-- External deps: DB/cache/queue/3rd-party/config system (if any)
-- Config sources: env/config files/flags (with evidence)
+6. 依赖与环境（仅需 "什么"）
+- 外部依赖：数据库/缓存/队列/第三方/配置系统（如果有）
+- 配置来源：环境变量/配置文件/标志（带证据）
 
-7. Risks & gotchas (evidence-based)
-- What looks fragile/confusing and why (with evidence)
+7. 风险与注意事项（基于证据）
+- 什么看起来脆弱/混乱，为什么（带证据，避免泛化）
 
-8. [OPEN QUESTIONS] (prioritized)
-- P0: blocks running or understanding core flow
-- P1: blocks implementing changes
-- Who should confirm (role: owner/PM/data/etc.)
+8. [OPEN QUESTIONS]（按优先级）
+- P0：阻碍运行或理解核心流程
+- P1：阻碍实施变更
+- 应由谁确认（角色：所有者/产品经理/数据等）

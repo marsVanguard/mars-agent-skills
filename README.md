@@ -1,27 +1,27 @@
 # mars-agent-skills
 
-A curated, portable collection of agent Skills focused on **new-project onboarding** and **documentation-first workflows**.
+一个精心策划的、可移植的代理技能集合，专注于**新项目上手**和**文档优先工作流**。
 
-These Skills are designed to be reusable across tools (e.g., Cursor, Claude Code, Trae) as they are primarily **structured SOPs + strict deliverables**.
+这些技能设计为可跨工具重用（例如 Cursor、Claude Code、Trae），因为它们主要是**结构化的标准操作流程 + 严格的交付物**。
 
-## What you get
+## 你将获得什么
 
-This repo currently includes 3 onboarding Skills:
+本仓库目前包含 3 个上手技能：
 
 - **project-scout**  
-  Evidence-based repo reconnaissance: module map, entrypoints, core flow candidates, dependencies, open questions.
+  基于证据的仓库侦察：模块地图、入口点、核心流程候选、依赖项、待澄清问题。
 
 - **runbook-builder**  
-  Generates an executable developer runbook: setup, run, test, debug, FAQ.
+  生成可执行的开发者运行手册：设置、运行、测试、调试、常见问题解答。
 
 - **domain-glossary**  
-  Extracts concept-level domain glossary + prioritized core scenarios (no API/DB schema details).
+  提取概念级领域术语表 + 优先核心场景（无 API/数据库架构细节）。
 
-All Skills share a consistent output strategy (see **OUTPUT_DIR** below).
+所有技能共享一致的输出策略（见下文 **OUTPUT_DIR**）。
 
 ---
 
-## Repository layout
+## 仓库布局
 
 ```txt
 mars-agent-skills/
@@ -42,20 +42,20 @@ mars-agent-skills/
     sample-invocations.md
 ````
 
-> Your tool (e.g., Cursor) typically discovers Skills when they are placed under:
+> 你的工具（例如 Cursor）通常会在以下位置发现技能：
 >
-> * project: `.cursor/skills/`
-> * global: `~/.cursor/skills/`
+> * 项目级：`.cursor/skills/`
+> * 全局：`~/.cursor/skills/`
 >
-> This repo stores Skills under `skills/` so you can easily copy/sync them into your tool-specific Skills directory.
+> 本仓库将技能存储在 `skills/` 目录下，以便你可以轻松将它们复制/同步到工具特定的技能目录中。
 
 ---
 
-## Install
+## 安装
 
-### Option A — Project-level install (recommended for teams)
+### 选项 A — 项目级安装（推荐给团队）
 
-1. Copy the desired Skill folders into your project:
+1. 将所需的技能文件夹复制到你的项目中：
 
 ```txt
 <your-project>/.cursor/skills/
@@ -64,13 +64,13 @@ mars-agent-skills/
   domain-glossary/
 ```
 
-2. Commit the `.cursor/skills/` folder so the whole team shares the same Skills.
+2. 提交 `.cursor/skills/` 文件夹，以便整个团队共享相同的技能。
 
-### Option B — Global install (recommended for individuals)
+### 选项 B — 全局安装（推荐给个人）
 
-Copy the Skill folders into your global skills directory, e.g.:
+将技能文件夹复制到你的全局技能目录中，例如：
 
-* macOS / Linux:
+* macOS / Linux：
 
 ```txt
 ~/.cursor/skills/
@@ -79,109 +79,119 @@ Copy the Skill folders into your global skills directory, e.g.:
   domain-glossary/
 ```
 
-> If your tool uses a different global directory, keep the same Skill folder structure:
-> `<skill-name>/SKILL.md` must exist.
+> 如果你的工具使用不同的全局目录，请保持相同的技能文件夹结构：
+> 必须存在 `<skill-name>/SKILL.md`。
 
 ---
 
-## How to use
+## 如何使用
 
-### Basic usage (no parameters)
+### 基本用法（无参数）
 
-Ask your agent to run a Skill by name (tool-specific syntax varies). Example prompts:
+要求你的代理按名称运行技能（工具特定语法有所不同）。示例提示：
 
 * **project-scout**
 
-  > Run skill: project-scout. Scan this repository and produce the deliverable.
+  > Run skill: project-scout. 扫描此仓库并生成交付物。
 
 * **runbook-builder**
 
-  > Run skill: runbook-builder. Generate a local dev runbook based on repo evidence.
+  > Run skill: runbook-builder. 基于仓库证据生成本地开发运行手册。
 
 * **domain-glossary**
 
-  > Run skill: domain-glossary. Extract a concept-level glossary and core scenarios.
+  > Run skill: domain-glossary. 提取概念级术语表和核心场景。
 
-### OUTPUT_DIR (portable output control)
+### OUTPUT_DIR（可移植输出控制）
 
-All Skills support a shared convention:
+所有技能支持共享约定：
 
-* Default output directory: `docs/onboarding/`
-* Override by specifying `OUTPUT_DIR=<path>` in your request
+* 默认输出目录：`docs/onboarding/`
+* 通过在请求中指定 `OUTPUT_DIR=<path>` 进行覆盖
 
-Examples:
+示例：
 
-* Write outputs into `docs/start-here/`:
+* 将输出写入 `docs/start-here/`：
 
   > Run skill: project-scout. OUTPUT_DIR=docs/start-here
 
-* Write outputs into `.docs/onboarding/`:
+* 将输出写入 `.docs/onboarding/`：
 
   > Run skill: runbook-builder. OUTPUT_DIR=.docs/onboarding
 
-### Fallback behavior (when OUTPUT_DIR is not provided)
+### 回退行为（未提供 OUTPUT_DIR 时）
 
-If you do **not** specify `OUTPUT_DIR`, the Skill will choose OUTPUT_ROOT in this order:
+如果你**未**指定 `OUTPUT_DIR`，技能将按以下顺序选择 OUTPUT_ROOT：
 
-1. `docs/onboarding/` (if it exists)
-2. `docs/` (if it exists)
-3. repository root `./`
+1. `docs/onboarding/`（如果存在）
+2. `docs/`（如果存在）
+3. 仓库根目录 `./`
 
-### If the tool cannot write files
+### 如果工具无法写入文件
 
-If file writing is not supported, each Skill will:
+如果不支持文件写入，每个技能将：
 
-1. Print `SAVE_AS: <OUTPUT_ROOT>/<filename>.md`
-2. Print the **full Markdown content** that you can copy and save manually.
+1. 打印 `SAVE_AS: <OUTPUT_ROOT>/<filename>.md`
+2. 打印**完整的 Markdown 内容**，你可以复制并手动保存。
 
 ---
 
-## Expected deliverables
+## 如何选择技能（快速决策）
 
-Each Skill produces exactly one Markdown document:
+如果你不确定该用哪个技能，请使用以下对照：
+
+- 想了解项目结构、入口点、模块关系 → **project-scout**
+- 想把项目跑起来、需要启动/测试/依赖服务 → **runbook-builder**
+- 想对齐业务名词、核心场景 → **domain-glossary**
+
+更详细的选择指南请查看 `skills/index.md`。
+
+## 预期交付物
+
+每个技能恰好生成一个 Markdown 文档：
 
 * `01_project_scout.md`
 * `02_runbook.md`
 * `03_domain_glossary.md`
 
-By default these land in `docs/onboarding/`.
+默认情况下，这些文件会保存在 `docs/onboarding/` 中。
 
 ---
 
-## Add a new Skill (quick start)
+## 添加新技能（快速入门）
 
-1. Copy the template:
+1. 复制模板：
 
 ```bash
 cp -r skills/_template-skill skills/<new-skill-name>
 ```
 
-2. Edit `skills/<new-skill-name>/SKILL.md`:
+2. 编辑 `skills/<new-skill-name>/SKILL.md`：
 
-* Update YAML frontmatter: `name`, `description`
-* Replace placeholders with your SOP + deliverable template
+* 更新 YAML 前置内容：`name`、`description`
+* 用你的标准操作流程 + 交付物模板替换占位符
 
-3. Update this README:
+3. 更新此 README：
 
-* Add the Skill to the list
-* Add a short description
+* 将技能添加到列表中
+* 添加简短描述
 
-4. Update `CHANGELOG.md` and open a PR.
-
----
-
-## Design principles
-
-* **Evidence-first**: key claims must cite paths/snippets/identifiers.
-* **Deliverable-driven**: each Skill outputs one reviewable artifact.
-* **Portable**: minimal tool-specific assumptions; OUTPUT_DIR convention.
-* **No hallucinations**: missing info must be labeled and turned into open questions.
+4. 更新 `CHANGELOG.md` 并打开 PR。
 
 ---
 
-## License
+## 设计原则
 
-MIT (see `LICENSE`).
+* **证据优先**：关键声明必须引用路径/代码片段/标识符。
+* **交付物驱动**：每个技能输出一个可审查的工件。
+* **可移植**：最小化工具特定假设；OUTPUT_DIR 约定。
+* **无幻觉**：缺失信息必须标记并转化为待澄清问题。
+
+---
+
+## 许可证
+
+MIT（详见 `LICENSE` 文件）。
 
 ````
 
